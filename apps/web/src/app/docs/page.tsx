@@ -4,8 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
-  Copy,
-  Check,
   Terminal,
   Search,
   Book,
@@ -16,7 +14,7 @@ import {
   Zap,
   FileText,
 } from "lucide-react";
-
+import CopyCodeBlock from "@/components/CopyCodeBlock";
 type Framework = {
   id: string;
   name: string;
@@ -230,22 +228,7 @@ const DOC_CONTENT: Record<string, React.ReactNode> = {
 export default function DocsPage() {
   const [activeId, setActiveId] = useState("react");
   const [activeSection, setActiveSection] = useState("Quickstart");
-  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-  const [copiedInstall, setCopiedInstall] = useState(false);
-
   const activeFramework = FRAMEWORKS.find((f) => f.id === activeId) || FRAMEWORKS[0];
-
-  const handleCopy = (text: string, index: number) => {
-    navigator.clipboard.writeText(text);
-    setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
-  };
-
-  const handleCopyInstall = (text: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedInstall(true);
-    setTimeout(() => setCopiedInstall(false), 2000);
-  };
 
   // Render specific content if available, otherwise generic text
   const renderContent = () => {
@@ -280,18 +263,7 @@ export default function DocsPage() {
               Install the SDK
             </h2>
             <div className="flex items-center justify-between bg-gray-900 rounded-xl p-4 shadow-sm border border-gray-800">
-              <code className="text-sm font-mono text-gray-300">{activeFramework.install}</code>
-              <button
-                onClick={() => handleCopyInstall(activeFramework.install)}
-                className="p-2 hover:bg-gray-800 rounded-md transition-colors text-gray-400 hover:text-white"
-                title="Copy command"
-              >
-                {copiedInstall ? (
-                  <Check className="w-4 h-4 text-green-400" />
-                ) : (
-                  <Copy className="w-4 h-4" />
-                )}
-              </button>
+              <CopyCodeBlock code={activeFramework.install} language="bash" />
             </div>
           </div>
 
@@ -309,22 +281,12 @@ export default function DocsPage() {
                       <span className="w-2.5 h-2.5 rounded-full bg-green-400"></span>
                       <span className="ml-2 font-medium">example.{activeFramework.language}</span>
                     </div>
-                    <button
-                      onClick={() => handleCopy(step.code, idx)}
-                      className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-black transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                    >
-                      {copiedIndex === idx ? (
-                        <Check className="w-3.5 h-3.5 text-green-600" />
-                      ) : (
-                        <Copy className="w-3.5 h-3.5" />
-                      )}
-                      {copiedIndex === idx ? "Copied" : "Copy"}
-                    </button>
+                    
                   </div>
                   <div className="p-6 bg-gray-900 overflow-x-auto">
-                    <pre className="text-[13px] font-mono text-gray-300 leading-relaxed">
-                      <code>{step.code}</code>
-                    </pre>
+                    <CopyCodeBlock code={step.code} language="typescript" />
+                    
+                  
                   </div>
                 </div>
               </div>
