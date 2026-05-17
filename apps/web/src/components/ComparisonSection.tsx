@@ -276,9 +276,9 @@ export default function ComparisonSection() {
     transition: { duration: 0.5 },
   };
 
-  const databases = [
-    { key: "firebase", label: "Firebase", accent: "text-orange-500" },
-    { key: "supabase", label: "Supabase", accent: "text-green-600" },
+const databases = [
+    { key: "firebase", label: "Firebase", accent: "text-orange-500", highlight: false },
+    { key: "supabase", label: "Supabase", accent: "text-green-600", highlight: false },
     {
       key: "zerith",
       label: "ZerithDB",
